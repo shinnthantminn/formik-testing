@@ -1,15 +1,12 @@
 import style from "./SimpleForm.module.css";
 import { useFormik } from "formik";
+import * as yup from "yup";
 
 function SimpleForm() {
   const initialValues = {
     name: "Shinn Thant Minn", //default value => Default ဆိုပေမဲ့ handleChange ပါရင်ပြင်လို့ရပါသေးတယ်
     email: "",
     channel: "",
-  };
-
-  const onSubmit = (values) => {
-    console.log("form Submit Data", values); //onSubmit အတွက်ပါပါတယ် submit အတွက် preventDefault ပါပါတယ်
   };
 
   const validate = (values) => {
@@ -34,10 +31,25 @@ function SimpleForm() {
     return error;
   };
 
+  const validationSchema = yup.object({
+    //joi သုံးသလိုပဲသုံးတာပါ
+    name: yup.string().required("Required"),
+    email: yup
+      .string()
+      .email("this email was invalid email")
+      .required("Required!"),
+    channel: yup.string().required("Required"),
+  });
+
+  const onSubmit = (values) => {
+    console.log("form Submit Data", values); //onSubmit အတွက်ပါပါတယ် submit အတွက် preventDefault ပါပါတယ်
+  };
+
   const formik = useFormik({
     initialValues,
-    validate, // သူပါ ရင် onSubmit အလုပ်မလုပ်ဘူး
+    //validate, // သူပါ ရင် onSubmit အလုပ်မလုပ်ဘူး
     onSubmit,
+    // validationSchema,
   }); //useFull method တွေရဖို့ အတွင် Object ကို Permeter အနနဲ့ ပေးလိုက်ရပါတယ်
 
   // for state management
@@ -45,7 +57,7 @@ function SimpleForm() {
   //error
   // console.log("form Error validation", formik.errors);
   //for blur visited field
-  console.log("visited field", formik.touched); // visited ဖြစ်ပြီးသွားတဲ့ field တွေကို true အနေနဲ့ Object ပြန်ပေးမှာပါ
+  //console.log("visited field", formik.touched); // visited ဖြစ်ပြီးသွားတဲ့ field တွေကို true အနေနဲ့ Object ပြန်ပေးမှာပါ
 
   return (
     <div className={style.mainForm}>
