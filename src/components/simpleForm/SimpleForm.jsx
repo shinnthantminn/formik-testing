@@ -1,5 +1,5 @@
 import style from "./SimpleForm.module.css";
-import { Formik } from "formik";
+import { Formik, Form } from "formik";
 import * as yup from "yup";
 
 function SimpleForm() {
@@ -31,7 +31,8 @@ function SimpleForm() {
       className={style.mainForm}
     >
       {({ handleSubmit, getFieldProps, errors, touched }) => (
-        <form className={style.form} onSubmit={handleSubmit}>
+        <Form className={style.form}>
+          {/*Form Component က onSubmit ပါပြီးသား*/}
           <label htmlFor="name">Name</label>
           <input
             type="text"
@@ -63,7 +64,7 @@ function SimpleForm() {
           {errors.channel && touched.channel ? <p>{errors.channel}</p> : null}
 
           <button type="submit">submit</button>
-        </form>
+        </Form>
       )}
     </Formik>
   );
