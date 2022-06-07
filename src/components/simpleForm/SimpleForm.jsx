@@ -1,5 +1,5 @@
 import style from "./SimpleForm.module.css";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 
 function SimpleForm() {
@@ -30,25 +30,23 @@ function SimpleForm() {
       initialValues={initialValues}
       className={style.mainForm}
     >
-      {({ errors, touched }) => (
-        <Form className={style.form}>
-          {/*Form Component က onSubmit ပါပြီးသား*/}
-          <label htmlFor="name">Name</label>
-          <Field type="text" name="name" id="name" autoComplete="off" />
-          {errors.name && touched.name ? <p>{errors.name}</p> : null}
+      <Form className={style.form}>
+        {/*Form Component က onSubmit ပါပြီးသား*/}
+        <label htmlFor="name">Name</label>
+        <Field type="text" name="name" id="name" autoComplete="off" />
+        <ErrorMessage name="name" />
 
-          <label htmlFor="email">Email</label>
-          {/*  Field သုံးလိုက်တာနဲ့ ကျန်တဲ့ Data Cache တွေလုပ်စရာမလို့တော့ပါဘူး */}
-          <Field type="email" name="email" id="email" autoComplete="off" />
-          {errors.email && touched.email ? <p>{errors.email}</p> : null}
+        <label htmlFor="email">Email</label>
+        {/*  Field သုံးလိုက်တာနဲ့ ကျန်တဲ့ Data Cache တွေလုပ်စရာမလို့တော့ပါဘူး */}
+        <Field type="email" name="email" id="email" autoComplete="off" />
+        <ErrorMessage name="email" />
 
-          <label htmlFor="channel">Channel</label>
-          <Field type="text" name="channel" id="channel" autoComplete="off" />
-          {errors.channel && touched.channel ? <p>{errors.channel}</p> : null}
+        <label htmlFor="channel">Channel</label>
+        <Field type="text" name="channel" id="channel" autoComplete="off" />
+        <ErrorMessage name="channel" />
 
-          <button type="submit">submit</button>
-        </Form>
-      )}
+        <button type="submit">submit</button>
+      </Form>
     </Formik>
   );
 }
