@@ -9,28 +9,6 @@ function SimpleForm() {
     channel: "",
   };
 
-  const validate = (values) => {
-    const error = {}; // ကြည့်လိုက်တာနဲ့ နားလည်နိုင်ပါတယ်
-
-    if (!values.name) {
-      error.name = "required";
-    }
-
-    if (!values.email) {
-      error.email = "required";
-    } else if (
-      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)
-    ) {
-      error.email = "email format was not valid";
-    }
-
-    if (!values.channel) {
-      error.channel = "required";
-    }
-
-    return error;
-  };
-
   const validationSchema = yup.object({
     //joi သုံးသလိုပဲသုံးတာပါ
     name: yup.string().required("Required"),
@@ -47,21 +25,12 @@ function SimpleForm() {
 
   const formik = useFormik({
     initialValues,
-    //validate, // သူပါ ရင် onSubmit အလုပ်မလုပ်ဘူး
     onSubmit,
-    // validationSchema,
-  }); //useFull method တွေရဖို့ အတွင် Object ကို Permeter အနနဲ့ ပေးလိုက်ရပါတယ်
-
-  // for state management
-  // console.log("form value handling", formik.values);
-  //error
-  // console.log("form Error validation", formik.errors);
-  //for blur visited field
-  //console.log("visited field", formik.touched); // visited ဖြစ်ပြီးသွားတဲ့ field တွေကို true အနေနဲ့ Object ပြန်ပေးမှာပါ
+    validationSchema,
+  });
 
   return (
     <div className={style.mainForm}>
-      {/*  handleSubmit ကတော့ form Submit ကို handle လုပ်တာပါ */}
       <form className={style.form} onSubmit={formik.handleSubmit}>
         <label htmlFor="name">Name</label>
         <input
@@ -69,9 +38,7 @@ function SimpleForm() {
           name="name"
           id="name"
           autoComplete="off"
-          onBlur={formik.handleBlur}
-          onChange={formik.handleChange} //name attribute နဲ့ initialValue က တန်ဖိုနဲ့တူအောင်ထားပေးရပါမယ်
-          value={formik.values.name}
+          {...formik.getFieldProps("name")}
         />
         {formik.errors.name && formik.touched.name ? (
           <p>{formik.errors.name}</p>
@@ -82,10 +49,8 @@ function SimpleForm() {
           type="email"
           name="email"
           id="email"
-          onBlur={formik.handleBlur}
           autoComplete="off"
-          onChange={formik.handleChange}
-          value={formik.values.email}
+          {...formik.getFieldProps("email")}
         />
         {formik.errors.email && formik.touched.email ? (
           <p>{formik.errors.email}</p>
@@ -97,9 +62,7 @@ function SimpleForm() {
           name="channel"
           id="channel"
           autoComplete="off"
-          onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
-          value={formik.values.channel}
+          {...formik.getFieldProps("channel")}
         />
         {formik.errors.channel && formik.touched.channel ? (
           <p>{formik.errors.channel}</p>
