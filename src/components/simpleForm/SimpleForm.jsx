@@ -1,5 +1,5 @@
 import style from "./SimpleForm.module.css";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 
 function SimpleForm() {
@@ -30,37 +30,20 @@ function SimpleForm() {
       initialValues={initialValues}
       className={style.mainForm}
     >
-      {({ handleSubmit, getFieldProps, errors, touched }) => (
+      {({ errors, touched }) => (
         <Form className={style.form}>
           {/*Form Component က onSubmit ပါပြီးသား*/}
           <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            autoComplete="off"
-            {...getFieldProps("name")}
-          />
+          <Field type="text" name="name" id="name" autoComplete="off" />
           {errors.name && touched.name ? <p>{errors.name}</p> : null}
 
           <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            autoComplete="off"
-            {...getFieldProps("email")}
-          />
+          {/*  Field သုံးလိုက်တာနဲ့ ကျန်တဲ့ Data Cache တွေလုပ်စရာမလို့တော့ပါဘူး */}
+          <Field type="email" name="email" id="email" autoComplete="off" />
           {errors.email && touched.email ? <p>{errors.email}</p> : null}
 
           <label htmlFor="channel">Channel</label>
-          <input
-            type="text"
-            name="channel"
-            id="channel"
-            autoComplete="off"
-            {...getFieldProps("channel")}
-          />
+          <Field type="text" name="channel" id="channel" autoComplete="off" />
           {errors.channel && touched.channel ? <p>{errors.channel}</p> : null}
 
           <button type="submit">submit</button>
