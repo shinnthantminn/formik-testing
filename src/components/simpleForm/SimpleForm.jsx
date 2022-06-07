@@ -34,7 +34,8 @@ function SimpleForm() {
         {/*Form Component က onSubmit ပါပြီးသား*/}
         <label htmlFor="name">Name</label>
         <Field type="text" name="name" id="name" autoComplete="off" />
-        <ErrorMessage name="name" />
+        {/*Error ကို တစ်ခါထည်း ဖမ်းပေးပါတယ်*/}
+        <ErrorMessage name="name" component="p" className="text-red-500" />
 
         <label htmlFor="email">Email</label>
         {/*  Field သုံးလိုက်တာနဲ့ ကျန်တဲ့ Data Cache တွေလုပ်စရာမလို့တော့ပါဘူး */}
