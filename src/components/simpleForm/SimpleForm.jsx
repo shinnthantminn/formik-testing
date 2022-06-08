@@ -10,6 +10,11 @@ function SimpleForm() {
     channel: "",
     comment: "",
     address: "",
+    //value တွေကို group အလိုက်ထားလို့ရပါတယ်
+    social: {
+      facebook: "",
+      twitter: "",
+    },
   };
 
   const validationSchema = yup.object({
@@ -69,6 +74,13 @@ function SimpleForm() {
             );
           }}
         </Field>
+
+        <label htmlFor="facebook">Facebook</label>
+        {/*name နေရာမှာ Dot notation နဲ့ ရေးပေးလိုက်ယုံပါပဲ*/}
+        <Field type={"text"} id={"facebook"} name={"social.facebook"} />
+
+        <label htmlFor="twitter">Facebook</label>
+        <Field type={"text"} id={"twitter"} name={"social.twitter"} />
 
         <button type="submit">submit</button>
       </Form>
