@@ -1,12 +1,15 @@
 import style from "./SimpleForm.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
+import ErrorText from "./ErrorText";
 
 function SimpleForm() {
   const initialValues = {
     name: "Shinn Thant Minn", //default value => Default ဆိုပေမဲ့ handleChange ပါရင်ပြင်လို့ရပါသေးတယ်
     email: "",
     channel: "",
+    comment: "",
+    address: "",
   };
 
   const validationSchema = yup.object({
@@ -17,6 +20,7 @@ function SimpleForm() {
       .email("this email was invalid email")
       .required("Required!"),
     channel: yup.string().required("Required"),
+    address: yup.string().required("Required"),
   });
 
   const onSubmit = (values) => {
@@ -40,11 +44,31 @@ function SimpleForm() {
         <label htmlFor="email">Email</label>
         {/*  Field သုံးလိုက်တာနဲ့ ကျန်တဲ့ Data Cache တွေလုပ်စရာမလို့တော့ပါဘူး */}
         <Field type="email" name="email" id="email" autoComplete="off" />
-        <ErrorMessage name="email" />
+        <ErrorMessage name="email" component={ErrorText} />
+        {/*Custom Hook နဲ့ Error message ပြပေးတာပါ*/}
 
         <label htmlFor="channel">Channel</label>
         <Field type="text" name="channel" id="channel" autoComplete="off" />
-        <ErrorMessage name="channel" />
+        <ErrorMessage name="channel">{(msg) => <p>{msg}</p>}</ErrorMessage>
+        {/* ဒါလည်းရပါတယ် */}
+
+        {/*textarea လိုမျိုး Components တွေလိုခြင်ရင် Field ရဲ့ As ဒါမှမဟုတ် Component တို့ကို သုံနိုင်ပါတယ် as ကို တော့ ပိုပြီ Recommend ပေးပါတယ်*/}
+        <label htmlFor="comment">Comment</label>
+        <Field as="textarea" name="comment" />
+
+        <label htmlFor="address">Address</label>
+
+        {/*Render Props pattern နဲ့ ရေးတာပါ အရမ်းမိုက်ပါတယ်*/}
+        <Field name="address">
+          {({ field, form, meta }) => {
+            return (
+              <div>
+                <input type="text" id="address" {...field} />
+                {meta.error && meta.touched ? <p>{meta.error}</p> : null}
+              </div>
+            );
+          }}
+        </Field>
 
         <button type="submit">submit</button>
       </Form>
