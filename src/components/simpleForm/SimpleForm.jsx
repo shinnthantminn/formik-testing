@@ -15,6 +15,8 @@ function SimpleForm() {
       facebook: "",
       twitter: "",
     },
+    //Array Value
+    phone: ["", ""],
   };
 
   const validationSchema = yup.object({
@@ -79,8 +81,15 @@ function SimpleForm() {
         {/*name နေရာမှာ Dot notation နဲ့ ရေးပေးလိုက်ယုံပါပဲ*/}
         <Field type={"text"} id={"facebook"} name={"social.facebook"} />
 
-        <label htmlFor="twitter">Facebook</label>
+        <label htmlFor="twitter">twitter</label>
         <Field type={"text"} id={"twitter"} name={"social.twitter"} />
+
+        {/*Array Value တွေကို index number နဲ့ထည့်လို့ရပါတယ်*/}
+        <label htmlFor="phoneOne">phoneOne</label>
+        <Field type="number" id={"phoneOne"} name={"phone[0]"} />
+
+        <label htmlFor="phoneTwo">phoneTwo</label>
+        <Field type="number" id={"phoneTwo"} name={"phone[1]"} />
 
         <button type="submit">submit</button>
       </Form>
