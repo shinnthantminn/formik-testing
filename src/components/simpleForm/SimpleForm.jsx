@@ -1,4 +1,5 @@
 import style from "./SimpleForm.module.css";
+import { useState } from "react";
 import {
   Formik,
   Form,
@@ -11,12 +12,29 @@ import * as yup from "yup";
 import ErrorText from "./ErrorText";
 
 function SimpleForm() {
+  const [data, setData] = useState(null);
   const initialValues = {
     name: "Shinn Thant Minn", //default value => Default ဆိုပေမဲ့ handleChange ပါရင်ပြင်လို့ရပါသေးတယ်
     email: "",
     channel: "",
     comment: "",
     address: "",
+    //value တွေကို group အလိုက်ထားလို့ရပါတယ်
+    social: {
+      facebook: "",
+      twitter: "",
+    },
+    //Array Value
+    phone: ["", ""],
+    Gf: [""],
+  };
+
+  const loadData = {
+    name: "Htet Kyawt Linn", //default value => Default ဆိုပေမဲ့ handleChange ပါရင်ပြင်လို့ရပါသေးတယ်
+    email: "Htethtet32@gmail.com",
+    channel: "စောင်ရူမ",
+    comment: "ဘောပဲရမယ်",
+    address: "လားလားလီးလီး",
     //value တွေကို group အလိုက်ထားလို့ရပါတယ်
     social: {
       facebook: "",
@@ -38,8 +56,11 @@ function SimpleForm() {
     address: yup.string().required("Required"),
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = (values, action) => {
+    // အောက်ကကောင်ကို ပြန်ပြီး False လုပ်ပေးတာပါ ဒါမှပြန်ပြီး Submit က enable ပြန်ဖြစ်မှာပါ
+    action.setSubmitting(false);
     console.log("form Submit Data", values); //onSubmit အတွက်ပါပါတယ် submit အတွက် preventDefault ပါပါတယ်
+    action.resetForm(); //reset Form လုပ်လို့ရပါတယ်
   };
 
   //fieldLevel Validation ကတော့ တစ်ခု ထည်းအတွက်လုပ်ပေးတာပါ Condition ပေါ်မှူတီပြီသုံးရပါတယ်
@@ -55,7 +76,8 @@ function SimpleForm() {
     <Formik
       onSubmit={onSubmit}
       validationSchema={validationSchema}
-      initialValues={initialValues}
+      initialValues={data || initialValues}
+      enableReinitialize // API Data တွေပဲဖြစ်ဖြစ်ပြဖို့ အတွက် initialValues ကို အချိန်အပြောင်းလုပ်ဖို့ပါ
       className={style.mainForm}
       // validateOnMount //သူကတော့ Dom Render ချ တာ နဲ့ valid စစ်တာမို့ Submit Disable နဲ့ တွဲ သုံးကြပါတယ်
       //ဒီနှစ်ခု လုံးပါရင် OnSubmit မှ သာ Error ကို စစ်ပေးတော့ မှာပါ
@@ -67,7 +89,6 @@ function SimpleForm() {
       {/*Render Props ကို သုံးပြီးတော့ Formik ကို UseFormik လိုမျိုး Manual သုံးလို့ရပါတယ်*/}
       {(formik) => {
         console.log(formik);
-        console.log(!(formik.dirty && formik.isValid));
         return (
           <Form className={style.form}>
             {/*Form Component က onSubmit ပါပြီးသား*/}
@@ -149,40 +170,50 @@ function SimpleForm() {
               }}
             </FieldArray>
 
-            <button
-              type={"button"}
-              onClick={() => formik.validateField("comment")}
-            >
-              Comment
-            </button>
-            <button type="button" onClick={() => formik.validateForm()}>
-              All
+            {/*<button*/}
+            {/*  type={"button"}*/}
+            {/*  onClick={() => formik.validateField("comment")}*/}
+            {/*>*/}
+            {/*  Comment*/}
+            {/*</button>*/}
+            {/*<button type="button" onClick={() => formik.validateForm()}>*/}
+            {/*  All*/}
+            {/*</button>*/}
+
+            {/*<button*/}
+            {/*  type="button"*/}
+            {/*  onClick={() => formik.setFieldTouched("comment")}*/}
+            {/*>*/}
+            {/*  touch Comment*/}
+            {/*</button>*/}
+            {/*<button*/}
+            {/*  type="button"*/}
+            {/*  onClick={() =>*/}
+            {/*    formik.setTouched({*/}
+            {/*      name: true,*/}
+            {/*      email: true,*/}
+            {/*      channel: true,*/}
+            {/*    })*/}
+            {/*  }*/}
+            {/*>*/}
+            {/*  All Touch*/}
+            {/*</button>*/}
+
+            {/*<button type="submit" disabled={!(formik.dirty && formik.isValid)}>*/}
+            {/*  /!*isValid Method ကို သုံးပြီးတော့ Submit ကို Disable လုပ်ထားလို့ရပါတယ်*!/*/}
+            {/*  /!*dirty ကတော့ Initial value မှာထည့်ထားတဲ့ State တွေကို ပြန်ပြင်ရင် true လို့ပြန်ပေးပါတယ်*!/*/}
+            {/*  /!*ဒီနှစ်ခု ကို ဒီလို သုံးတာကောင်းပါတယ် ဒါပေမဲ့ validateMount ကို recommend ပေးပါတယ်*!/*/}
+            {/*  submit*/}
+            {/*</button>*/}
+
+            {/*server နဲ့ ဆက်သွယ်လုပ်ကိုင်တဲ့ အခါမှာ Submit ကို အကြိမ်ကြိမ်မနှိပ်မိအောင် လို ကာကွယ်လို့ရပါတယ်*/}
+            <button type="submit" disabled={formik.isSubmitting}>
+              Submit
             </button>
 
-            <button
-              type="button"
-              onClick={() => formik.setFieldTouched("comment")}
-            >
-              touch Comment
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                formik.setTouched({
-                  name: true,
-                  email: true,
-                  channel: true,
-                })
-              }
-            >
-              All Touch
-            </button>
-
-            <button type="submit" disabled={!(formik.dirty && formik.isValid)}>
-              {/*isValid Method ကို သုံးပြီးတော့ Submit ကို Disable လုပ်ထားလို့ရပါတယ်*/}
-              {/*dirty ကတော့ Initial value မှာထည့်ထားတဲ့ State တွေကို ပြန်ပြင်ရင် true လို့ပြန်ပေးပါတယ်*/}
-              {/*ဒီနှစ်ခု ကို ဒီလို သုံးတာကောင်းပါတယ် ဒါပေမဲ့ validateMount ကို recommend ပေးပါတယ်*/}
-              submit
+            {/*API ကလာတဲ့ Data တွေကြရင်သုံးလို့ရပါတယ် enableReinitialize တော့လိုပါတယ်*/}
+            <button type="button" onClick={() => setData(loadData)}>
+              Load Data
             </button>
           </Form>
         );
