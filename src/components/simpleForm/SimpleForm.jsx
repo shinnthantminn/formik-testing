@@ -57,6 +57,7 @@ function SimpleForm() {
       validationSchema={validationSchema}
       initialValues={initialValues}
       className={style.mainForm}
+      // validateOnMount //သူကတော့ Dom Render ချ တာ နဲ့ valid စစ်တာမို့ Submit Disable နဲ့ တွဲ သုံးကြပါတယ်
       //ဒီနှစ်ခု လုံးပါရင် OnSubmit မှ သာ Error ကို စစ်ပေးတော့ မှာပါ
       // validateOnChange={false}
       //onChange လုပ်ရင်လည်း တစ်ခြားနှစ်ခုကို Error ပြပေးမှာ မဟုတ်တော့ ပါဘူး
@@ -66,6 +67,7 @@ function SimpleForm() {
       {/*Render Props ကို သုံးပြီးတော့ Formik ကို UseFormik လိုမျိုး Manual သုံးလို့ရပါတယ်*/}
       {(formik) => {
         console.log(formik);
+        console.log(!(formik.dirty && formik.isValid));
         return (
           <Form className={style.form}>
             {/*Form Component က onSubmit ပါပြီးသား*/}
@@ -176,7 +178,12 @@ function SimpleForm() {
               All Touch
             </button>
 
-            <button type="submit">submit</button>
+            <button type="submit" disabled={!(formik.dirty && formik.isValid)}>
+              {/*isValid Method ကို သုံးပြီးတော့ Submit ကို Disable လုပ်ထားလို့ရပါတယ်*/}
+              {/*dirty ကတော့ Initial value မှာထည့်ထားတဲ့ State တွေကို ပြန်ပြင်ရင် true လို့ပြန်ပေးပါတယ်*/}
+              {/*ဒီနှစ်ခု ကို ဒီလို သုံးတာကောင်းပါတယ် ဒါပေမဲ့ validateMount ကို recommend ပေးပါတယ်*/}
+              submit
+            </button>
           </Form>
         );
       }}
