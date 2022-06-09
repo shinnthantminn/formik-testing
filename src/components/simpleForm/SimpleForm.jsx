@@ -1,5 +1,5 @@
 import style from "./SimpleForm.module.css";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as yup from "yup";
 import ErrorText from "./ErrorText";
 
@@ -17,6 +17,7 @@ function SimpleForm() {
     },
     //Array Value
     phone: ["", ""],
+    Gf: [""],
   };
 
   const validationSchema = yup.object({
@@ -90,6 +91,32 @@ function SimpleForm() {
 
         <label htmlFor="phoneTwo">phoneTwo</label>
         <Field type="number" id={"phoneTwo"} name={"phone[1]"} />
+
+        <label htmlFor="GF">GirlFriend List</label>
+        {/*Dynamic Array လုပ်တာပါတော် အသုံးဝင်ပါတယ်*/}
+        <FieldArray name={"Gf"}>
+          {({
+            push,
+            remove,
+            form: {
+              values: { Gf },
+            },
+          }) =>
+            Gf.map((i, inx) => (
+              <div key={inx}>
+                <Field name={`Gf[${inx}]`} />
+                {inx > 0 && (
+                  <button type={"button"} onClick={() => remove(inx)}>
+                    -
+                  </button>
+                )}
+                <button type={"button"} onClick={() => push("")}>
+                  +
+                </button>
+              </div>
+            ))
+          }
+        </FieldArray>
 
         <button type="submit">submit</button>
       </Form>
