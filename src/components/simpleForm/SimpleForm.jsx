@@ -1,5 +1,12 @@
 import style from "./SimpleForm.module.css";
-import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
+import {
+  Formik,
+  Form,
+  Field,
+  ErrorMessage,
+  FieldArray,
+  FastField,
+} from "formik";
 import * as yup from "yup";
 import ErrorText from "./ErrorText";
 
@@ -35,12 +42,26 @@ function SimpleForm() {
     console.log("form Submit Data", values); //onSubmit အတွက်ပါပါတယ် submit အတွက် preventDefault ပါပါတယ်
   };
 
+  //fieldLevel Validation ကတော့ တစ်ခု ထည်းအတွက်လုပ်ပေးတာပါ Condition ပေါ်မှူတီပြီသုံးရပါတယ်
+  const validateComment = (value) => {
+    let error;
+    if (!value) {
+      error = "required";
+    }
+    return error;
+  };
+
   return (
     <Formik
       onSubmit={onSubmit}
       validationSchema={validationSchema}
       initialValues={initialValues}
       className={style.mainForm}
+      //ဒီနှစ်ခု လုံးပါရင် OnSubmit မှ သာ Error ကို စစ်ပေးတော့ မှာပါ
+      // validateOnChange={false}
+      //onChange လုပ်ရင်လည်း တစ်ခြားနှစ်ခုကို Error ပြပေးမှာ မဟုတ်တော့ ပါဘူး
+      // validateOnBlur={false}
+      // onBlur ဖြစ်သွားလည်း Error ပြပေးမှာ မဟုတ်တော့ ပါဘူး
     >
       <Form className={style.form}>
         {/*Form Component က onSubmit ပါပြီးသား*/}
@@ -62,13 +83,16 @@ function SimpleForm() {
 
         {/*textarea လိုမျိုး Components တွေလိုခြင်ရင် Field ရဲ့ As ဒါမှမဟုတ် Component တို့ကို သုံနိုင်ပါတယ် as ကို တော့ ပိုပြီ Recommend ပေးပါတယ်*/}
         <label htmlFor="comment">Comment</label>
-        <Field as="textarea" name="comment" />
+        <Field as="textarea" name="comment" validate={validateComment} />
+        <ErrorMessage name={"comment"} component="p" />
 
         <label htmlFor="address">Address</label>
 
         {/*Render Props pattern နဲ့ ရေးတာပါ အရမ်းမိုက်ပါတယ်*/}
-        <Field name="address">
+        {/*FastField ကတော့ Performance optimization အတွက် သုံးကြပါတယ် */}
+        <FastField name="address">
           {({ field, form, meta }) => {
+            // console.log("i am render");
             return (
               <div>
                 <input type="text" id="address" {...field} />
@@ -76,7 +100,7 @@ function SimpleForm() {
               </div>
             );
           }}
-        </Field>
+        </FastField>
 
         <label htmlFor="facebook">Facebook</label>
         {/*name နေရာမှာ Dot notation နဲ့ ရေးပေးလိုက်ယုံပါပဲ*/}
@@ -101,8 +125,10 @@ function SimpleForm() {
             form: {
               values: { Gf },
             },
-          }) =>
-            Gf.map((i, inx) => (
+            form,
+          }) => {
+            console.log(form.errors);
+            return Gf.map((i, inx) => (
               <div key={inx}>
                 <Field name={`Gf[${inx}]`} />
                 {inx > 0 && (
@@ -114,8 +140,8 @@ function SimpleForm() {
                   +
                 </button>
               </div>
-            ))
-          }
+            ));
+          }}
         </FieldArray>
 
         <button type="submit">submit</button>
