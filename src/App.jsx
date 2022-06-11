@@ -1,9 +1,12 @@
-import SimpleForm from "./components/simpleForm/SimpleForm";
+import { ChakraProvider } from "@chakra-ui/react";
+import Login from "./components/Login/Login";
 
 const App = () => (
-    <div>
-        <SimpleForm/>
-    </div>
-)
+  <div>
+    <ChakraProvider>
+      <Login />
+    </ChakraProvider>
+  </div>
+);
 
-export default App
+export default App;
